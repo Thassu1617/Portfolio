@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Palagiri Thasneem — AI & Machine Learning Student</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FAF9F5;
+    --paper-alt:#F1EFE8;
+    --card:#FFFFFF;
+    --ink:#1C2430;
+    --ink-soft:#5B6472;
+    --ink-faint:#8B92A0;
+    --line:#E1DDD2;
+
+    --role:#6C63FF;    --role-bg:#EDECFF;
+    --tool:#1F8A46;    --tool-bg:#E1F3E6;
+    --domain:#C97A1D;  --domain-bg:#FBEEDC;
+    --proj:#C1443D;    --proj-bg:#FBE7E5;
+
+    --font-display:'Space Grotesk', sans-serif;
+    --font-body:'IBM Plex Serif', serif;
+    --font-mono:'IBM Plex Mono', monospace;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--font-body);
+    line-height:1.6;
+    font-size:16px;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  a{color:inherit;text-decoration:none;}
+
+  .wrap{max-width:1080px;margin:0 auto;padding:0 32px;}
+
+  h1,h2,h3,h4{font-family:var(--font-display);font-weight:600;letter-spacing:-0.01em;color:var(--ink);}
+
+  /* ---------- Entity tag motif ---------- */
+  .ent{
+    position:relative;
+    display:inline-block;
+    padding:1px 8px 2px;
+    border-radius:4px;
+    margin:0 2px;
+    font-weight:500;
+    white-space:nowrap;
+  }
+  .ent-label{display:none;}
+  .ent-role{background:var(--role-bg);color:#3F3AA8;}
+  .ent-tool{background:var(--tool-bg);color:#175E32;}
+  .ent-domain{background:var(--domain-bg);color:#8C560F;}
+  .ent-proj{background:var(--proj-bg);color:#8A2E29;}
+
+  .ent{opacity:0;animation:tagIn 0.5s ease forwards;}
+  @keyframes tagIn{
+    from{opacity:0;transform:translateY(4px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+
+  .section-tag{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-family:var(--font-mono);
+    font-size:12px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+    margin-bottom:18px;
+  }
+  .section-tag .dot{width:7px;height:7px;border-radius:50%;display:inline-block;}
+
+  /* ---------- Nav ---------- */
+  nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(250,249,245,0.88);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  nav .wrap{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:16px 32px;
+  }
+  .brand{font-family:var(--font-mono);font-size:14px;font-weight:600;letter-spacing:0.02em;}
+  .brand .dot{color:var(--role);}
+  .navlinks{display:flex;gap:28px;list-style:none;}
+  .navlinks a{
+    font-family:var(--font-mono);font-size:13px;color:var(--ink-soft);
+    letter-spacing:0.02em;
+    padding-bottom:2px;
+    border-bottom:1px solid transparent;
+    transition:border-color 0.2s, color 0.2s;
+  }
+  .navlinks a:hover{color:var(--ink);border-color:var(--role);}
+  .nav-toggle{display:none;background:none;border:none;font-family:var(--font-mono);font-size:20px;color:var(--ink);cursor:pointer;}
+
+  @media (max-width:760px){
+    .navlinks{
+      position:fixed;top:57px;left:0;right:0;
+      background:var(--paper);border-bottom:1px solid var(--line);
+      flex-direction:column;gap:0;
+      max-height:0;overflow:hidden;
+      transition:max-height 0.3s ease;
+    }
+    .navlinks.open{max-height:400px;}
+    .navlinks a{display:block;padding:14px 32px;border-bottom:1px solid var(--line);}
+    .nav-toggle{display:block;}
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{padding:96px 0 80px;background:var(--paper);}
+  .hero .eyebrow{
+    font-family:var(--font-mono);font-size:13px;color:var(--ink-faint);
+    letter-spacing:0.1em;text-transform:uppercase;margin-bottom:22px;
+  }
+  .hero h1{
+    font-size:clamp(36px,5.5vw,58px);
+    line-height:1.12;
+    max-width:900px;
+    margin-bottom:28px;
+  }
+  .hero .lede{
+    font-family:var(--font-body);
+    font-size:19px;
+    color:var(--ink-soft);
+    max-width:640px;
+    margin-bottom:40px;
+  }
+  .hero-actions{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:48px;}
+  .btn{
+    font-family:var(--font-mono);font-size:13px;letter-spacing:0.03em;
+    padding:13px 24px;border-radius:6px;
+    display:inline-flex;align-items:center;gap:8px;
+    transition:transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .btn-primary{background:var(--ink);color:var(--paper);}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(28,36,48,0.25);}
+  .btn-outline{border:1px solid var(--ink);color:var(--ink);}
+  .btn-outline:hover{transform:translateY(-2px);background:var(--ink);color:var(--paper);}
+
+  .hero-links{display:flex;gap:24px;font-family:var(--font-mono);font-size:13px;color:var(--ink-soft);flex-wrap:wrap;}
+  .hero-links a{border-bottom:1px solid var(--line);}
+  .hero-links a:hover{color:var(--role);border-color:var(--role);}
+
+  /* ---------- Section shell ---------- */
+  section{padding:88px 0;border-top:1px solid var(--line);}
+  section:first-of-type{border-top:none;}
+  .section-head{margin-bottom:48px;}
+  .section-head h2{font-size:clamp(26px,3.5vw,34px);max-width:640px;}
+
+  /* ---------- About ---------- */
+  .about-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:56px;align-items:start;}
+  .about-text p{margin-bottom:18px;color:var(--ink-soft);font-size:16.5px;max-width:560px;}
+  .about-text strong{color:var(--ink);font-weight:600;}
+  .about-card{
+    background:var(--card);border:1px solid var(--line);border-radius:10px;
+    padding:28px;font-family:var(--font-mono);font-size:13px;
+  }
+  .about-card .row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line);color:var(--ink-soft);}
+  .about-card .row:last-child{border-bottom:none;}
+  .about-card .row span:last-child{color:var(--ink);font-weight:500;text-align:right;}
+
+  @media (max-width:760px){.about-grid{grid-template-columns:1fr;}}
+
+  /* ---------- What I do ---------- */
+  .do-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+  .do-card{
+    background:var(--card);border:1px solid var(--line);border-radius:10px;padding:26px 22px;
+    transition:transform 0.2s ease, border-color 0.2s ease;
+  }
+  .do-card:hover{transform:translateY(-4px);border-color:var(--ink-faint);}
+  .do-card .icon{font-size:26px;margin-bottom:14px;display:block;}
+  .do-card h3{font-size:16px;margin-bottom:10px;}
+  .do-card p{font-size:14px;color:var(--ink-soft);}
+  @media (max-width:900px){.do-grid{grid-template-columns:1fr 1fr;}}
+  @media (max-width:520px){.do-grid{grid-template-columns:1fr;}}
+
+  /* ---------- Skills ---------- */
+  .skills-groups{display:grid;grid-template-columns:1fr 1fr;gap:36px 48px;}
+  .skill-group h4{
+    font-family:var(--font-mono);font-size:12px;letter-spacing:0.1em;text-transform:uppercase;
+    color:var(--ink-faint);margin-bottom:14px;font-weight:600;
+  }
+  .chip-row{display:flex;flex-wrap:wrap;gap:9px;}
+  .chip{
+    font-family:var(--font-mono);font-size:13px;padding:7px 13px;border-radius:6px;font-weight:500;
+  }
+  @media (max-width:700px){.skills-groups{grid-template-columns:1fr;}}
+
+  /* ---------- Projects ---------- */
+  .project-card{
+    background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:36px;margin-bottom:28px;
+  }
+  .project-card.featured{border-color:var(--role);box-shadow:0 8px 24px rgba(108,99,255,0.08);}
+  .project-top{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap;margin-bottom:6px;}
+  .project-title{display:flex;align-items:center;gap:10px;}
+  .project-title h3{font-size:22px;}
+  .star{color:var(--role);font-size:15px;}
+  .project-sub{font-family:var(--font-mono);font-size:12.5px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:18px;}
+  .project-desc{color:var(--ink-soft);max-width:680px;margin-bottom:20px;font-size:16px;}
+  .stack-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px;}
+  .stack-chip{
+    font-family:var(--font-mono);font-size:12px;padding:5px 11px;border-radius:5px;
+    background:var(--paper-alt);color:var(--ink-soft);border:1px solid var(--line);
+  }
+  .feat-list{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:8px 24px;margin-bottom:22px;}
+  .feat-list li{font-size:14.5px;color:var(--ink-soft);padding-left:16px;position:relative;}
+  .feat-list li::before{content:"—";position:absolute;left:0;color:var(--ink-faint);}
+  .project-built{font-size:14.5px;color:var(--ink-soft);border-top:1px dashed var(--line);padding-top:18px;margin-bottom:20px;}
+  .project-link{
+    font-family:var(--font-mono);font-size:13px;font-weight:600;
+    display:inline-flex;align-items:center;gap:6px;color:var(--ink);
+    border-bottom:1px solid var(--ink);
+  }
+  .project-link:hover{color:var(--role);border-color:var(--role);}
+  @media (max-width:600px){.feat-list{grid-template-columns:1fr;}}
+
+  /* ---------- Experience timeline ---------- */
+  .timeline-item{display:grid;grid-template-columns:220px 1fr;gap:32px;padding-bottom:8px;}
+  .timeline-item .tl-date{font-family:var(--font-mono);font-size:13px;color:var(--ink-faint);padding-top:4px;}
+  .tl-body{border-left:2px solid var(--line);padding-left:28px;position:relative;padding-bottom:8px;}
+  .tl-body::before{
+    content:"";position:absolute;left:-7px;top:6px;width:12px;height:12px;border-radius:50%;
+    background:var(--paper);border:2px solid var(--role);
+  }
+  .tl-body h3{font-size:19px;margin-bottom:4px;}
+  .tl-org{font-family:var(--font-mono);font-size:13px;color:var(--ink-soft);margin-bottom:14px;}
+  .tl-body ul{list-style:none;}
+  .tl-body li{font-size:15px;color:var(--ink-soft);padding-left:18px;position:relative;margin-bottom:6px;}
+  .tl-body li::before{content:"—";position:absolute;left:0;color:var(--ink-faint);}
+  @media (max-width:640px){.timeline-item{grid-template-columns:1fr;} .tl-date{padding-left:28px;}}
+
+  /* ---------- Education & Certs ---------- */
+  .split-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;}
+  .edu-card{margin-bottom:28px;}
+  .edu-card h3{font-size:18px;margin-bottom:4px;}
+  .edu-card .field{color:var(--domain);font-family:var(--font-mono);font-size:13px;margin-bottom:8px;}
+  .edu-card .meta{font-size:14px;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;max-width:460px;}
+  .cert-card{padding:18px 0;border-bottom:1px solid var(--line);}
+  .cert-card:first-child{padding-top:0;}
+  .cert-card h4{font-size:15.5px;margin-bottom:4px;}
+  .cert-card p{font-size:13.5px;color:var(--ink-soft);}
+  .cert-card .provider{font-family:var(--font-mono);font-size:12px;color:var(--tool);text-transform:uppercase;letter-spacing:0.05em;}
+  @media (max-width:760px){.split-grid{grid-template-columns:1fr;}}
+
+  /* ---------- Achievements / Exploring ---------- */
+  .achieve-grid,.explore-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  .explore-grid{grid-template-columns:repeat(4,1fr);}
+  .achieve-card,.explore-card{
+    background:var(--card);border:1px solid var(--line);border-radius:10px;padding:24px 20px;
+  }
+  .achieve-card .icon,.explore-card .icon{font-size:22px;display:block;margin-bottom:12px;}
+  .achieve-card h3,.explore-card h3{font-size:15.5px;margin-bottom:8px;}
+  .achieve-card p,.explore-card p{font-size:13.5px;color:var(--ink-soft);}
+  @media (max-width:900px){.achieve-grid{grid-template-columns:1fr 1fr;} .explore-grid{grid-template-columns:1fr 1fr;}}
+  @media (max-width:520px){.achieve-grid,.explore-grid{grid-template-columns:1fr;}}
+
+  /* ---------- GitHub CTA ---------- */
+  .gh-band{
+    background:var(--ink);color:var(--paper);border-radius:14px;padding:56px 48px;
+    display:flex;justify-content:space-between;align-items:center;gap:32px;flex-wrap:wrap;
+  }
+  .gh-band h2{color:var(--paper);font-size:26px;max-width:480px;margin-bottom:10px;}
+  .gh-band p{color:#B9C0CC;max-width:460px;font-size:15px;}
+  .gh-band .btn-primary{background:var(--paper);color:var(--ink);}
+  .gh-band .btn-primary:hover{box-shadow:0 6px 16px rgba(0,0,0,0.3);}
+
+  /* ---------- Contact ---------- */
+  .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;}
+  .contact-lede{font-size:20px;color:var(--ink-soft);max-width:440px;margin-bottom:0;}
+  .contact-list{display:flex;flex-direction:column;gap:0;}
+  .contact-row{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:20px 0;border-bottom:1px solid var(--line);
+  }
+  .contact-row:first-child{padding-top:0;}
+  .contact-row .label{font-family:var(--font-mono);font-size:12px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:0.08em;}
+  .contact-row .value{font-size:16px;font-weight:500;}
+  .contact-row a.value:hover{color:var(--role);}
+  @media (max-width:760px){.contact-grid{grid-template-columns:1fr;}}
+
+  footer{border-top:1px solid var(--line);padding:32px 0;}
+  footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+  footer p{font-family:var(--font-mono);font-size:12.5px;color:var(--ink-faint);}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important;animation-iteration-count:1 !important;transition-duration:0.001ms !important;}
+    html{scroll-behavior:auto;}
+  }
+
+  :focus-visible{outline:2px solid var(--role);outline-offset:3px;}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a href="#home" class="brand">thasneem<span class="dot">.</span>dev</a>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">☰</button>
+    <ul class="navlinks" id="navLinks">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero" id="home">
+  <div class="wrap">
+    <div class="eyebrow">// Portfolio — B.Tech AI &amp; ML, 3rd Year</div>
+    <h1 id="heroLine">
+      Hi, I'm Palagiri Thasneem — building
+      <span class="ent ent-domain">AI</span> and
+      <span class="ent ent-domain">Machine Learning</span>
+      applications as a
+      <span class="ent ent-role">Software Developer</span>.
+    </h1>
+    <p class="lede">I design and ship real, working systems — interview-prep platforms, retrieval chatbots, resume-screening tools — using
+      <span class="ent ent-tool">Python</span>,
+      <span class="ent ent-tool">React</span>,
+      <span class="ent ent-tool">Flask</span> and
+      <span class="ent ent-tool">Firebase</span>.
+    </p>
+    <div class="hero-actions">
+      <a href="#projects" class="btn btn-primary">View My Projects →</a>
+      <a href="#" class="btn btn-outline" id="resumeBtn">Download Resume</a>
+    </div>
+    <div class="hero-links">
+      <a href="https://github.com/Thassu1617" target="_blank" rel="noopener">GitHub / Thassu1617</a>
+      <a href="https://www.linkedin.com/in/palagiri-thasneem17" target="_blank" rel="noopener">LinkedIn / palagiri-thasneem17</a>
+    </div>
+  </div>
+</header>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="wrap">
+    <div class="about-grid">
+      <div class="about-text">
+        <div class="section-tag"><span class="dot" style="background:var(--role)"></span>section · about</div>
+        <h2 style="margin-bottom:26px;">The short version</h2>
+        <p>I'm a third-year <strong>B.Tech student specializing in Artificial Intelligence and Machine Learning</strong> at A1 Global Institute of Technology &amp; Engineering.</p>
+        <p>I'm passionate about building practical applications using AI, Machine Learning, and modern software development — not just studying the theory, but shipping things people can actually use.</p>
+        <p>My project work spans an <strong>AI-powered interview preparation platform</strong>, a <strong>Retrieval-Augmented Generation chatbot</strong> for college-related queries, and an <strong>AI-powered resume analysis platform</strong> built on Natural Language Processing.</p>
+        <p>I'm currently looking for <strong>internship and software development opportunities</strong> where I can contribute, keep learning, and grow as an AI engineer.</p>
+      </div>
+      <div class="about-card">
+        <div class="row"><span>Focus</span><span>AI / ML · NLP · Full-Stack</span></div>
+        <div class="row"><span>Studying</span><span>B.Tech, AI &amp; ML</span></div>
+        <div class="row"><span>Institute</span><span>A1 Global Inst. of Tech &amp; Eng.</span></div>
+        <div class="row"><span>Year</span><span>3rd Year (2024 – 2028)</span></div>
+        <div class="row"><span>Based in</span><span>Kurabalakota, Andhra Pradesh</span></div>
+        <div class="row"><span>Looking for</span><span>Internships · SDE roles</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT I DO -->
+<section id="what">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag"><span class="dot" style="background:var(--domain)"></span>section · what i do</div>
+      <h2>Four ways I build</h2>
+    </div>
+    <div class="do-grid">
+      <div class="do-card">
+        <span class="icon">🤖</span>
+        <h3>Artificial Intelligence</h3>
+        <p>Practical AI applications that solve real problems — interview preparation, resume analysis, conversational tools.</p>
+      </div>
+      <div class="do-card">
+        <span class="icon">🧠</span>
+        <h3>Machine Learning</h3>
+        <p>Python and ML libraries applied to data processing, prediction, and intelligent analysis pipelines.</p>
+      </div>
+      <div class="do-card">
+        <span class="icon">💻</span>
+        <h3>Software Development</h3>
+        <p>Full-stack web applications using React, Flask, Node.js, and modern frontend tooling.</p>
+      </div>
+      <div class="do-card">
+        <span class="icon">🔎</span>
+        <h3>Natural Language Processing</h3>
+        <p>NLP applications that process and analyze text — resume screening, semantic relevance evaluation.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag"><span class="dot" style="background:var(--tool)"></span>section · skills</div>
+      <h2>Technical skills, tagged</h2>
+    </div>
+    <div class="skills-groups">
+      <div class="skill-group">
+        <h4>Programming Languages</h4>
+        <div class="chip-row">
+          <span class="chip" style="background:var(--role-bg);color:#3F3AA8;">Python</span>
+          <span class="chip" style="background:var(--role-bg);color:#3F3AA8;">Java</span>
+          <span class="chip" style="background:var(--role-bg);color:#3F3AA8;">C</span>
+          <span class="chip" style="background:var(--role-bg);color:#3F3AA8;">HTML</span>
+          <span class="chip" style="background:var(--role-bg);color:#3F3AA8;">CSS</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h4>Frameworks &amp; Development</h4>
+        <div class="chip-row">
+          <span class="chip" style="background:var(--tool-bg);color:#175E32;">React</span>
+          <span class="chip" style="background:var(--tool-bg);color:#175E32;">Node.js</span>
+          <span class="chip" style="background:var(--tool-bg);color:#175E32;">Flask</span>
+          <span class="chip" style="background:var(--tool-bg);color:#175E32;">FastAPI</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h4>AI &amp; Data</h4>
+        <div class="chip-row">
+          <span class="chip" style="background:var(--domain-bg);color:#8C560F;">Machine Learning</span>
+          <span class="chip" style="background:var(--domain-bg);color:#8C560F;">Pandas</span>
+          <span class="chip" style="background:var(--domain-bg);color:#8C560F;">NumPy</span>
+          <span class="chip" style="background:var(--domain-bg);color:#8C560F;">Matplotlib</span>
+          <span class="chip" style="background:var(--domain-bg);color:#8C560F;">Natural Language Processing</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h4>Developer Tools</h4>
+        <div class="chip-row">
+          <span class="chip" style="background:var(--proj-bg);color:#8A2E29;">GitHub</span>
+          <span class="chip" style="background:var(--proj-bg);color:#8A2E29;">Docker</span>
+          <span class="chip" style="background:var(--proj-bg);color:#8A2E29;">Google Cloud Platform</span>
+          <span class="chip" style="background:var(--proj-bg);color:#8A2E29;">VS Code</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag"><span class="dot" style="background:var(--proj)"></span>section · featured projects</div>
+      <h2>Three projects, one throughline: AI that does something useful with text</h2>
+    </div>
+
+    <div class="project-card featured">
+      <div class="project-top">
+        <div class="project-title">
+          <h3>InterviewVerse AI</h3>
+          <span class="star">★ featured</span>
+        </div>
+      </div>
+      <div class="project-sub">AI-Powered Interview Preparation Platform</div>
+      <div class="stack-row">
+        <span class="stack-chip">React.js</span><span class="stack-chip">Vite</span><span class="stack-chip">CSS</span>
+        <span class="stack-chip">Gemini API</span><span class="stack-chip">Three.js</span>
+        <span class="stack-chip">React Three Fiber</span><span class="stack-chip">Tailwind CSS</span>
+      </div>
+      <p class="project-desc">A full-stack AI-powered platform that helps users prepare for interviews through mock interviews, resume analysis, career coaching, and personalized performance tracking.</p>
+      <ul class="feat-list">
+        <li>AI-powered mock interviews</li>
+        <li>Resume analysis</li>
+        <li>Career coaching</li>
+        <li>Personalized performance tracking</li>
+        <li>Responsive user interface</li>
+        <li>3D interactive interface</li>
+      </ul>
+      <p class="project-built">I developed a full-stack AI platform combining interview preparation with AI-based analysis and personalized guidance, including a responsive 3D interface built with Three.js and React Three Fiber for a more engaging prep experience.</p>
+      <a class="project-link" href="https://github.com/Thassu1617/interview-with-ai" target="_blank" rel="noopener">View on GitHub →</a>
+    </div>
+
+    <div class="project-card">
+      <div class="project-top">
+        <div class="project-title"><h3>College RAG Chatbot</h3></div>
+      </div>
+      <div class="project-sub">AI-Powered College Information Assistant</div>
+      <div class="stack-row">
+        <span class="stack-chip">Python</span><span class="stack-chip">Flask</span><span class="stack-chip">RAG</span>
+      </div>
+      <p class="project-desc">A chatbot that provides accurate answers to college-related questions by retrieving information directly from institutional documents.</p>
+      <ul class="feat-list">
+        <li>Retrieval-Augmented Generation</li>
+        <li>College-related question answering</li>
+        <li>Institutional document-based responses</li>
+        <li>Lightweight user interface</li>
+        <li>Easy access to college information</li>
+      </ul>
+      <p class="project-built">I built the chatbot using Retrieval-Augmented Generation to pull relevant information from institutional documents, paired with a lightweight, user-friendly interface for quick access.</p>
+      <a class="project-link" href="https://github.com/Thassu1617/COLLEGE_RAG_CHATBOT" target="_blank" rel="noopener">View on GitHub →</a>
+    </div>
+
+    <div class="project-card">
+      <div class="project-top">
+        <div class="project-title"><h3>Resume Analyzer</h3></div>
+      </div>
+      <div class="project-sub">AI-Powered Resume Screening Platform</div>
+      <div class="stack-row">
+        <span class="stack-chip">Python</span><span class="stack-chip">Streamlit</span>
+        <span class="stack-chip">Scikit-learn</span><span class="stack-chip">NLTK</span><span class="stack-chip">NLP</span>
+      </div>
+      <p class="project-desc">A screening platform that evaluates resumes against job descriptions using Natural Language Processing.</p>
+      <ul class="feat-list">
+        <li>Resume screening</li>
+        <li>Job description matching</li>
+        <li>NLP-based text preprocessing</li>
+        <li>Semantic relevance evaluation</li>
+        <li>Cosine similarity</li>
+        <li>ATS match score generation</li>
+      </ul>
+      <p class="project-built">I built a text-processing pipeline that preprocesses resume and job-description content, calculates semantic relevance with cosine similarity, and generates an ATS match score to rank resumes.</p>
+      <a class="project-link" href="https://github.com/Thassu1617/Resume-Analyzer" target="_blank" rel="noopener">View on GitHub →</a>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag"><span class="dot" style="background:var(--role)"></span>section · experience</div>
+      <h2>Experience</h2>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-date">May 2026 – Jul 2026</div>
+      <div class="tl-body">
+        <h3>App Development Intern</h3>
+        <div class="tl-org">Apex Planet — Bangalore</div>
+        <p style="color:var(--ink-soft);font-size:15px;margin-bottom:14px;">Worked on application development using Python, Flask, and Machine Learning libraries.</p>
+        <ul>
+          <li>Developed applications using Python</li>
+          <li>Worked with Flask for application development</li>
+          <li>Used Machine Learning libraries in application development</li>
+          <li>Worked with Android Studio on Windows</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION + CERTIFICATIONS -->
+<section id="education">
+  <div class="wrap">
+    <div class="split-grid">
+      <div>
+        <div class="section-tag"><span class="dot" style="background:var(--domain)"></span>section · education</div>
+        <h2 style="margin-bottom:28px;">Education</h2>
+
+        <div class="edu-card">
+          <h3>B.Tech — Computer Science</h3>
+          <div class="field">Specialization: Artificial Intelligence &amp; Machine Learning</div>
+          <div class="meta">
+            <span>A1 Global Institute of Technology &amp; Engineering, Markapuram, Idupur</span>
+            <span>2024 – 2028 · GPA 7.0</span>
+          </div>
+        </div>
+
+        <div class="edu-card">
+          <h3>Intermediate — MPC</h3>
+          <div class="meta">
+            <span>Sri Madanapalle Junior College, Madanapalle</span>
+            <span>2022 – 2024 · GPA 6.2</span>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-tag"><span class="dot" style="background:var(--tool)"></span>section · certifications</div>
+        <h2 style="margin-bottom:28px;">Certifications</h2>
+
+        <div class="cert-card">
+          <h4>Introduction to Artificial Intelligence</h4>
+          <p>Certification of completion in Introduction to Artificial Intelligence.</p>
+        </div>
+        <div class="cert-card">
+          <h4>Introduction to OpenAI GPT Models</h4>
+          <div class="provider">Infosys</div>
+          <p>Introductory certification focused on OpenAI GPT models.</p>
+        </div>
+        <div class="cert-card">
+          <h4>Introduction to Deep Learning</h4>
+          <div class="provider">Infosys</div>
+          <p>Introductory certification focused on Deep Learning.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ACHIEVEMENTS -->
+<section id="achievements">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag"><span class="dot" style="background:var(--proj)"></span>section · achievements &amp; leadership</div>
+      <h2>Achievements &amp; leadership</h2>
+    </div>
+    <div class="achieve-grid">
+      <div class="achieve-card">
+        <span class="icon">⭐</span>
+        <h3>HackerRank — Python &amp; Problem Solving</h3>
+        <p>Secured a 5-Star badge on HackerRank in Python and Problem Solving.</p>
+      </div>
+      <div class="achieve-card">
+        <span class="icon">🏆</span>
+        <h3>Department Technical Quiz</h3>
+        <p>Winner of a technical quiz conducted by the department.</p>
+      </div>
+      <div class="achieve-card">
+        <span class="icon">🎤</span>
+        <h3>Event Organizer</h3>
+        <p>Served as an Event Organizer in the department, demonstrating leadership and involvement in departmental activities.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CURRENTLY EXPLORING -->
+<section id="exploring">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag"><span class="dot" style="background:var(--role)"></span>section · currently exploring</div>
+      <h2>Currently exploring</h2>
+    </div>
+    <div class="explore-grid">
+      <div class="explore-card">
+        <span class="icon">🤖</span>
+        <h3>Artificial Intelligence</h3>
+        <p>Building practical AI applications and exploring new approaches to intelligent software.</p>
+      </div>
+      <div class="explore-card">
+        <span class="icon">🧠</span>
+        <h3>Machine Learning</h3>
+        <p>Strengthening my ML understanding through hands-on projects and application development.</p>
+      </div>
+      <div class="explore-card">
+        <span class="icon">💻</span>
+        <h3>Software Development</h3>
+        <p>Improving my development skills by building real-world applications with modern frameworks.</p>
+      </div>
+      <div class="explore-card">
+        <span class="icon">📚</span>
+        <h3>Continuous Learning</h3>
+        <p>Continuously learning new technologies and sharpening problem-solving through practical experience.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GITHUB CTA -->
+<section id="github">
+  <div class="wrap">
+    <div class="gh-band">
+      <div>
+        <h2>Explore my projects</h2>
+        <p>I believe the best way to learn software development is by building. Explore my AI applications, RAG-based systems, and NLP projects on GitHub.</p>
+      </div>
+      <a href="https://github.com/Thassu1617" target="_blank" rel="noopener" class="btn btn-primary">Visit My GitHub →</a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="wrap">
+    <div class="contact-grid">
+      <div>
+        <div class="section-tag"><span class="dot" style="background:var(--domain)"></span>section · contact</div>
+        <h2 style="margin-bottom:18px;">Let's connect</h2>
+        <p class="contact-lede">Have an opportunity, project idea, or just want to talk about AI and technology? I'd be happy to connect.</p>
+      </div>
+      <div class="contact-list">
+        <div class="contact-row">
+          <span class="label">Email</span>
+          <a class="value" href="mailto:palagirithassu@gmail.com">palagirithassu@gmail.com</a>
+        </div>
+        <div class="contact-row">
+          <span class="label">LinkedIn</span>
+          <a class="value" href="https://www.linkedin.com/in/palagiri-thasneem17" target="_blank" rel="noopener">palagiri-thasneem17</a>
+        </div>
+        <div class="contact-row">
+          <span class="label">GitHub</span>
+          <a class="value" href="https://github.com/Thassu1617" target="_blank" rel="noopener">Thassu1617</a>
+        </div>
+        <div class="contact-row">
+          <span class="label">Location</span>
+          <span class="value">Kurabalakota, Andhra Pradesh</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>© 2026 Palagiri Thasneem. Built with passion for Artificial Intelligence, Machine Learning, and Software Development.</p>
+    <p>Let's build something meaningful.</p>
+  </div>
+</footer>
+
+<script>
+  // Mobile nav toggle
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+
+  // Stagger the entity-tag reveal in the hero on load
+  document.querySelectorAll('#heroLine .ent, .hero .lede .ent').forEach((el, i) => {
+    el.style.animationDelay = (0.15 * i) + 's';
+  });
+
+  // Resume button: no file attached, so give a graceful nudge instead of a dead link
+  document.getElementById('resumeBtn').addEventListener('click', (e) => {
+    e.preventDefault();
+    alert('Add a link to your resume PDF here (e.g. Google Drive or a /resume.pdf file) to make this button live.');
+  });
+</script>
+
+</body>
+</html>
